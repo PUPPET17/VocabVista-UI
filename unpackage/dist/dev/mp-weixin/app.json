@@ -1,9 +1,8 @@
 {
-  "pages": [
-    "pages/index/index"
-  ],
-  "window": {
-    "backgroundColor": "#ffffff"
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "usingComponents": {}
+}#ffffff"
   },
   "usingComponents": {}
 }

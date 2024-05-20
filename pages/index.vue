@@ -10,7 +10,7 @@
 				<input class="flip-card__input" :placeholder="passwordHolder" type="password" v-model="password">
             	<div class="button-container">
 					<button @click="toggleFlip" class="flip-card__btn">去注册</button>
-					<button @click="login" class="flip-card__btn">登入账号</button>
+					<button @click="login('Home')" class="flip-card__btn">登入账号</button>
 				</div>
             </form>
           </div>
@@ -35,6 +35,10 @@
 <script>
 	import axios from 'axios';
 	import {loginRequest} from "@/api/loginAndRegister";
+	import {useRouter} from 'vue-router'
+	
+	const router = useRouter()
+
 	export default {
 	  data() {
 		return {
@@ -44,20 +48,27 @@
 		  nicknameHolder: '昵称',
 		  passwordHolder: '密码',
 		  twiceHolder: '确认密码',
-		  isFlipped: false,
+		  isFlipped: false
 		};
 	  },
 	  methods: {
-		login() {
+		login(url) {
 		  this.validateFields();
 		  if (this.formIsValid()) {
-			axios.post('/api/auth/login', {
+			console.log(this.$route.path);
+			axios.post('/auth/login', {
 			    username: this.nickname,
 			    password: this.password
 			})
 			.then(response => {
-			    console.log('Login successful:', response);
+			    console.log('Login successful', response.data);
 			})
+			router.push({name:url}).then(() => {
+			  console.log(this.$route.path);
+			}).catch(error => {
+			  console.error(error);
+			});
+			console.log(this.$route.path);
 		  } else {
 			console.log('Validation failed. Login form not submitted.');
 		  }
@@ -66,12 +77,12 @@
 		  this.validateFields();
 		  this.checkPasswordTwice();
 		  if (this.formIsValid() && !this.twiceError()) {
-			axios.post('/api/auth/register', {
+			axios.post('/auth/register', {
 				username: this.nickname,
 				password: this.password
 			})
 			.then(response => {
-				console.log('Registration successful:', response);
+				console.log('Registration successful:', response.data);
 				// 处理注册成功逻辑，例如跳转或状态更新
 			})
 		  } else {
@@ -80,22 +91,17 @@
 		},
 		validateFields() {
 		  const specialChars = /[^a-zA-Z0-9]/g;
-
-		  // 验证昵称
 		  this.nicknameHolder = '昵称';
 		  if (this.nickname.length < 5 || this.nickname.length > 10 || specialChars.test(this.nickname)) {
 			this.nickname = '';
 			this.nicknameHolder = '昵称: 5-10个字符，不能包含特殊符号';
 		  }
-		  
-		  // 验证密码
 		  this.passwordHolder = '密码';
 		  if (this.password.length < 6 || this.password.length > 20 || specialChars.test(this.password)) {
 			this.password = '';
 			this.passwordHolder = '密码: 6-20个字符，不能包含特殊符号';
 		  }
 		},
-
 		checkPasswordTwice() {
 		  this.twiceHolder = '确认密码';
 		  if (this.twice !== this.password) {
@@ -110,17 +116,16 @@
 			this.nicknameHolder = '昵称';
 			this.passwordHolder = '密码';
 			this.twiceHolder= '确认密码';
-		  this.isFlipped = !this.isFlipped;
+			this.isFlipped = !this.isFlipped;
 		},
 		formIsValid() {
 		  // 确保 placeholder 没有显示错误信息
 		  return this.nicknameHolder === '昵称' && this.passwordHolder === '密码' && this.twiceHolder === '确认密码';
 		},
 		twiceError() {
-		  // 验证确认密码是否有错误
 		  return this.twiceHolder !== '确认密码';
 		}
-	  },
+	  }
 	};
 </script>
 

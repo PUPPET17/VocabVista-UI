@@ -1,0 +1,1 @@
+<view class="home"><view>欢迎来到主页</view><router-link wx:if="{{a}}" u-s="{{['d']}}" u-i="8c291ab8-0" bind:__l="__l" u-p="{{a}}">Go to login</router-link></view>
