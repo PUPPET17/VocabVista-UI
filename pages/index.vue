@@ -35,43 +35,45 @@
 <script>
 	import axios from 'axios';
 	import {loginRequest} from "@/api/loginAndRegister";
-	import {useRouter} from 'vue-router'
-	
-	const router = useRouter()
 
 	export default {
 	  data() {
 		return {
-		  nickname: '',
-		  password: '',
-		  twice: '',
-		  nicknameHolder: '昵称',
-		  passwordHolder: '密码',
-		  twiceHolder: '确认密码',
-		  isFlipped: false
+			nickname: 'admin',
+			password: 'admin',
+			twice: '',
+			nicknameHolder: '昵称',
+			passwordHolder: '密码',
+			twiceHolder: '确认密码',
+			isFlipped: false
 		};
+	  },
+	  onLoad() {
+	  	
+	  },
+	  onShow(){
+		// uni.hideTabBar();
 	  },
 	  methods: {
 		login(url) {
-		  this.validateFields();
-		  if (this.formIsValid()) {
-			console.log(this.$route.path);
-			axios.post('/auth/login', {
-			    username: this.nickname,
-			    password: this.password
-			})
-			.then(response => {
-			    console.log('Login successful', response.data);
-			})
-			router.push({name:url}).then(() => {
-			  console.log(this.$route.path);
-			}).catch(error => {
-			  console.error(error);
-			});
-			console.log(this.$route.path);
-		  } else {
-			console.log('Validation failed. Login form not submitted.');
-		  }
+			this.validateFields();
+			if (this.formIsValid()) {
+				axios.post('/auth/login', {
+					username: this.nickname,
+					password: this.password
+				})
+				.then(response => {
+					console.log('Login successful', response.data);
+					uni.switchTab({
+						url:'/pages/home'
+					});
+				})
+				.catch(error => {
+					console.error('Login failed:', error);
+				});
+			} else {
+				console.log('Validation failed. Login form not submitted.');
+			}
 		},
 		register() {
 		  this.validateFields();
@@ -83,31 +85,33 @@
 			})
 			.then(response => {
 				console.log('Registration successful:', response.data);
-				// 处理注册成功逻辑，例如跳转或状态更新
 			})
 		  } else {
 			console.log('Validation failed. Registration form not submitted.');
+			uni.navigateTo({
+				url: '/pages/index' 
+			});
 		  }
 		},
 		validateFields() {
-		  const specialChars = /[^a-zA-Z0-9]/g;
-		  this.nicknameHolder = '昵称';
-		  if (this.nickname.length < 5 || this.nickname.length > 10 || specialChars.test(this.nickname)) {
-			this.nickname = '';
-			this.nicknameHolder = '昵称: 5-10个字符，不能包含特殊符号';
-		  }
-		  this.passwordHolder = '密码';
-		  if (this.password.length < 6 || this.password.length > 20 || specialChars.test(this.password)) {
-			this.password = '';
-			this.passwordHolder = '密码: 6-20个字符，不能包含特殊符号';
-		  }
+			const specialChars = /[^a-zA-Z0-9]/g;
+			this.nicknameHolder = '昵称';
+			if (this.nickname.length < 1 || this.nickname.length > 10 || specialChars.test(this.nickname)) {
+				this.nickname = '';
+				this.nicknameHolder = '昵称: 1-10个字符，不能包含特殊符号';
+			}
+			this.passwordHolder = '密码';
+			if (this.password.length < 1 || this.password.length > 20 || specialChars.test(this.password)) {
+				this.password = '';
+				this.passwordHolder = '密码: 1-20个字符，不能包含特殊符号';
+			}
 		},
 		checkPasswordTwice() {
-		  this.twiceHolder = '确认密码';
-		  if (this.twice !== this.password) {
-			this.twice = '';
-			this.twiceHolder = '两次输入的密码不匹配';
-		  }
+			this.twiceHolder = '确认密码';
+			if (this.twice !== this.password) {
+				this.twice = '';
+				this.twiceHolder = '两次输入的密码不匹配';
+			}
 		},
 		toggleFlip() {
 			this.nickname = '';
@@ -119,16 +123,16 @@
 			this.isFlipped = !this.isFlipped;
 		},
 		formIsValid() {
-		  // 确保 placeholder 没有显示错误信息
-		  return this.nicknameHolder === '昵称' && this.passwordHolder === '密码' && this.twiceHolder === '确认密码';
+			// 确保 placeholder 没有显示错误信息
+			return this.nicknameHolder === '昵称' && this.passwordHolder === '密码' && this.twiceHolder === '确认密码';
 		},
 		twiceError() {
-		  return this.twiceHolder !== '确认密码';
+			return this.twiceHolder !== '确认密码';
 		}
 	  }
 	};
 </script>
 
 <style>
-	@import url("../../static/css/index.css");
+	@import url("../static/css/index.css");
 </style>
