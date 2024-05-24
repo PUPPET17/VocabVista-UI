@@ -20,13 +20,40 @@
 </template>
 
 <script>
-export default {
-  name: 'Home',
-  data(){
-  },
-  onLoad(){
-  }
-};
+	import service from '../utils/axios';
+	
+	
+	export default {
+		name: 'Home',
+		data() {
+			return {
+				jsonData: null, // 初始时jsonData为空，等待数据加载
+			};
+		},
+		computed: {
+			// 使用计算属性来格式化JSON数据
+			formattedJson() {
+				return JSON.stringify(this.jsonData, null, 2);
+			}
+		},
+		// 在组件创建后立刻发起请求
+		created() {
+			this.fetchData();
+		},
+		methods: {
+			// 定义一个方法来获取数据
+			fetchData() {
+				service.get('/your-api-endpoint') // 替换成你的API端点
+					.then(response => {
+						this.jsonData = response.data;
+					})
+					.catch(error => {
+						// 请求失败，打印错误信息
+						console.error('Error fetching data:', error);
+					});
+			}
+		}
+	};
 </script>
 
 <style scoped>

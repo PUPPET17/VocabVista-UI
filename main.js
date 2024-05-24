@@ -1,9 +1,5 @@
 import App from './App'
-import axios from 'axios'
-
-const baseURL = "http://localhost:8090"
-axios.defaults.baseURL = "http://localhost:8090"
-
+import axios from '/utils/axios.js'
 
 // #ifndef VUE3
 import Vue from 'vue'

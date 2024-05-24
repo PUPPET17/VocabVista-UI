@@ -20,6 +20,13 @@
             	<input class="flip-card__input" :placeholder="nicknameHolder" type="text" v-model="nickname">
 				<input class="flip-card__input" :placeholder="passwordHolder" type="password" v-model="password">
 				<input class="flip-card__input" :placeholder="twiceHolder" type="password" v-model="twice">
+				<select class="flip-card__input" name="interestDomain" id="interest-select" style="color:GREY" v-model="interestDomain">
+				  <option value="">--请选择你感兴趣的领域--</option>
+				  <option value="1">医疗</option>
+				  <option value="2">科技</option>
+				  <option value="3">历史</option>
+				  <option value="4">文学</option>
+				</select>
             	<div class="button-container">
 					<button @click="toggleFlip" class="flip-card__btn">已有账号</button>
             		<button @click="register" class="flip-card__btn">注册</button>
@@ -33,19 +40,20 @@
 </template>
 
 <script>
-	import axios from 'axios';
 	import {loginRequest} from "@/api/loginAndRegister";
+	import service from '../utils/axios';
 
 	export default {
 	  data() {
 		return {
 			nickname: 'admin',
 			password: 'admin',
-			twice: '',
+			twice: '',//二次确认密码
 			nicknameHolder: '昵称',
 			passwordHolder: '密码',
 			twiceHolder: '确认密码',
-			isFlipped: false
+			isFlipped: false,
+			interestDomain:''
 		};
 	  },
 	  onLoad() {
@@ -55,55 +63,89 @@
 		// uni.hideTabBar();
 	  },
 	  methods: {
-		login(url) {
+		login() {
 			this.validateFields();
 			if (this.formIsValid()) {
-				axios.post('/auth/login', {
+				service.post('/auth/login', {
 					username: this.nickname,
 					password: this.password
 				})
 				.then(response => {
 					console.log('Login successful', response.data);
+					localStorage.setItem('token', response.data);
 					uni.switchTab({
 						url:'/pages/home'
 					});
 				})
 				.catch(error => {
-					console.error('Login failed:', error);
+				    if (error.response && error.response.status === 401) {
+				        console.log('Auth failed:', error.response.data);
+				        uni.showToast({
+				            title: '登录失败，请检查您的凭证',
+				            icon: 'none',
+				            duration: 2000
+				        });
+				    } else {
+				        console.error('Login failed:', error);
+				    }
 				});
 			} else {
 				console.log('Validation failed. Login form not submitted.');
 			}
 		},
 		register() {
-		  this.validateFields();
-		  this.checkPasswordTwice();
-		  if (this.formIsValid() && !this.twiceError()) {
-			axios.post('/auth/register', {
-				username: this.nickname,
-				password: this.password
-			})
-			.then(response => {
-				console.log('Registration successful:', response.data);
-			})
-		  } else {
-			console.log('Validation failed. Registration form not submitted.');
-			uni.navigateTo({
-				url: '/pages/index' 
-			});
-		  }
+			this.validateFields();
+			this.checkPasswordTwice();
+			if (this.formIsValid() && !this.twiceError()) {
+				service.post('/auth/register', {
+					username: this.nickname,
+					password: this.password,
+					interestDomain: this.interestDomain
+				})
+				.then(response => {
+					if (response.data===0) {
+						console.log('Registration faild:', response.data);
+						uni.showToast({
+						    title: 'Registration faild:用户名已存在',
+						    icon: 'none',
+						    duration: 2000
+						});
+						this.nickname='';
+						this.twice='';
+					} else{
+						uni.showToast({
+						    title: 'Registration Successful',
+						    icon: 'none',
+						    duration: 2000
+						});
+						uni.navigateTo({
+							url: '/pages/index' 
+						});
+					}
+				})
+				.catch(error => {
+				    console.error('Registration failed:', error);
+				})
+			} else {
+				console.log('Validation failed. Registration form not submitted.');
+				uni.showToast({
+				    title: 'Validation failed. Registration form not submitted.',
+				    icon: 'none',
+				    duration: 2000
+				});
+			}
 		},
 		validateFields() {
 			const specialChars = /[^a-zA-Z0-9]/g;
 			this.nicknameHolder = '昵称';
-			if (this.nickname.length < 1 || this.nickname.length > 10 || specialChars.test(this.nickname)) {
+			if (this.nickname.length < 5 || this.nickname.length > 10 || specialChars.test(this.nickname)) {
 				this.nickname = '';
-				this.nicknameHolder = '昵称: 1-10个字符，不能包含特殊符号';
+				this.nicknameHolder = '昵称: 5-10个字符，不能包含特殊符号';
 			}
 			this.passwordHolder = '密码';
-			if (this.password.length < 1 || this.password.length > 20 || specialChars.test(this.password)) {
+			if (this.password.length < 5 || this.password.length > 20 || specialChars.test(this.password)) {
 				this.password = '';
-				this.passwordHolder = '密码: 1-20个字符，不能包含特殊符号';
+				this.passwordHolder = '密码: 5-20个字符，不能包含特殊符号';
 			}
 		},
 		checkPasswordTwice() {
@@ -123,7 +165,6 @@
 			this.isFlipped = !this.isFlipped;
 		},
 		formIsValid() {
-			// 确保 placeholder 没有显示错误信息
 			return this.nicknameHolder === '昵称' && this.passwordHolder === '密码' && this.twiceHolder === '确认密码';
 		},
 		twiceError() {
