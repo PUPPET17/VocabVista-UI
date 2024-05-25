@@ -3,9 +3,15 @@
     <view class="header">
       <view class="avatar"></view>
     </view>
-    <view class="content">
+    <view class="content" v-if="jsonData">
       <text class="title">Daily Word</text>
       <view class="main-box">
+        <!-- 显示单词和音标 -->
+        <text>{{ jsonData.word }} {{ jsonData.phonetic }}</text>
+		<!-- 显示定义 -->
+		<text>{{ jsonData.definition }}</text>
+		<!-- 显示翻译 -->
+		<text>{{ jsonData.translation }}</text>
       </view>
       <view class="sub-boxes">
         <view class="sub-box">
@@ -43,9 +49,10 @@
 		methods: {
 			// 定义一个方法来获取数据
 			fetchData() {
-				service.get('/your-api-endpoint') // 替换成你的API端点
+				service.get('/interest/getInterestWord') // 替换成你的API端点
 					.then(response => {
 						this.jsonData = response.data;
+						console.log(response.data)
 					})
 					.catch(error => {
 						// 请求失败，打印错误信息

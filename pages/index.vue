@@ -72,7 +72,7 @@
 				})
 				.then(response => {
 					console.log('Login successful', response.data);
-					localStorage.setItem('token', response.data);
+					localStorage.setItem('token', response.data.token);
 					uni.switchTab({
 						url:'/pages/home'
 					});
