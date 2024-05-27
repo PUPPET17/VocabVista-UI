@@ -13,9 +13,8 @@
 			<text>{{ jsonData.definition }}</text>
 		</view>
 		<view class="sub-boxes">
-		    <info-card class="sub-box" title="Learn" :count="learnCount" />
-			<p>&nbsp;&nbsp;&nbsp;</p>
-		    <info-card class="sub-box" title="Review" :count="reviewCount" />
+			<info-card class="sub-box" title="Learn" :count="learnCount" targetUrl="/pages/word" />
+			<info-card class="sub-box" title="Review" :count="reviewCount" targetUrl="/pages/review" />
 		</view>
     </view>
   </view>
@@ -118,7 +117,7 @@
 
 .main-box {
   flex: 1;
-  background-color: #ffeded;
+  background-color: #FFEDED;
   margin-bottom: 10px;
   padding: 10px;
   border-radius: 22px;
@@ -133,16 +132,13 @@
 .sub-boxes {
   display: flex;
   justify-content: space-between;
+  gap: 5%; /* 在flex元素之间创建间隙 */
 }
 
 .sub-box {
-  width: 48%;
-  /* 小盒子宽度 */
+  flex: 1; /* 允许两个卡片根据可用空间伸缩 */
   background-color: #ffeded;
-  /* 小盒子的背景颜色 */
   border-radius: 22px;
-  display: flex; /* 使其成为弹性容器 */
-  flex-direction: column; /* 子项垂直布局 */
-  padding: 15px; /* 内边距 */
+  padding: 15px;
 }
 </style>

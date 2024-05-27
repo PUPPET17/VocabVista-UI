@@ -41,6 +41,20 @@
 		{
 			"navigationBarTitleText" : ""
 		}
+	},
+	{
+		"path" : "pages/review",
+		"style" : 
+		{
+			"navigationBarTitleText" : ""
+		}
+	},
+	{
+		"path" : "component/wordHeader",
+		"style" : 
+		{
+			"navigationBarTitleText" : ""
+		}
 	}
   ],
   "globalStyle": {
