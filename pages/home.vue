@@ -4,36 +4,37 @@
       <view class="avatar"></view>
     </view>
     <view class="content" v-if="jsonData">
-      <text class="title">Daily Word</text>
-      <view class="main-box">
-        <!-- 显示单词和音标 -->
-        <text>{{ jsonData.word }} {{ jsonData.phonetic }}</text>
-		<!-- 显示定义 -->
-		<text>{{ jsonData.definition }}</text>
-		<!-- 显示翻译 -->
-		<text>{{ jsonData.translation }}</text>
-      </view>
-      <view class="sub-boxes">
-        <view class="sub-box">
-          
-        </view>
-        <view class="sub-box">
-          
-        </view>
-      </view>
+		<text class="title">Daily Word</text>
+		<view class="main-box">
+			<!-- 显示单词和音标 -->
+			<text style="color: black;">{{ jsonData.word }}&nbsp;{{ jsonData.translation }}</text>
+			<text>{{ jsonData.phonetic }}</text>
+			<!-- 显示定义 -->
+			<text>{{ jsonData.definition }}</text>
+		</view>
+		<view class="sub-boxes">
+		    <info-card class="sub-box" title="Learn" :count="learnCount" />
+			<p>&nbsp;&nbsp;&nbsp;</p>
+		    <info-card class="sub-box" title="Review" :count="reviewCount" />
+		</view>
     </view>
   </view>
 </template>
 
 <script>
 	import service from '../utils/axios';
-	
+	import InfoCard from '../component/infoCard';
 	
 	export default {
 		name: 'Home',
+		components: {
+		    InfoCard,
+		},
 		data() {
 			return {
 				jsonData: null, // 初始时jsonData为空，等待数据加载
+				learnCount:1,
+				reviewCount:1
 			};
 		},
 		computed: {
@@ -49,7 +50,7 @@
 		methods: {
 			// 定义一个方法来获取数据
 			fetchData() {
-				service.get('/interest/getInterestWord') // 替换成你的API端点
+				service.get('/interest/getInterestWord')
 					.then(response => {
 						this.jsonData = response.data;
 						console.log(response.data)
@@ -58,6 +59,11 @@
 						// 请求失败，打印错误信息
 						console.error('Error fetching data:', error);
 					});
+			},
+			learning(){
+				uni.navigateTo({
+					url:'/pages/word'
+				})
 			}
 		}
 	};
@@ -118,6 +124,12 @@
   border-radius: 22px;
 }
 
+.main-box text {
+  display: block; /* 使 text 元素成为块级元素 */
+  color: #ef4444; /* 红色文本 */
+  margin-bottom: 10px; /* 在元素之间添加一些空间 */
+}
+
 .sub-boxes {
   display: flex;
   justify-content: space-between;
@@ -128,21 +140,9 @@
   /* 小盒子宽度 */
   background-color: #ffeded;
   /* 小盒子的背景颜色 */
-  padding: 10px;
   border-radius: 22px;
-
-}
-
-.footer {
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  background-color: #ddd;
-  /* 导航栏的背景颜色 */
-}
-
-.nav-item {
-  flex: 1;
-  text-align: center;
+  display: flex; /* 使其成为弹性容器 */
+  flex-direction: column; /* 子项垂直布局 */
+  padding: 15px; /* 内边距 */
 }
 </style>

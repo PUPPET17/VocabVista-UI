@@ -3,27 +3,45 @@
     {
 		"path": "pages/index",
 		"style": {
-			"navigationBarTitleText": "登录页"
+			"navigationBarTitleText": "登录页",
+			"navigationStyle": "custom" 
 		}
     },
 	{
 		"path": "pages/home",
 		"style": {
-		  "navigationBarTitleText": "首页"
+		  "navigationBarTitleText": "首页",
+		  "navigationStyle": "custom" 
 		}
 	},
     {
 		"path": "pages/dashboard",
 		"style": {
-			"navigationBarTitleText": "dashboard"
+			"navigationBarTitleText": "dashboard",
+			"navigationStyle": "custom" 
 		}
     },
     {
 		"path": "pages/mine",
 		"style": {
-			"navigationBarTitleText": "我的"
+			"navigationBarTitleText": "我的",
+			"navigationStyle": "custom" 
 		}
-    }
+    },
+	{
+		"path": "pages/word",
+		"style": {
+			"navigationBarTitleText": "word",
+			"navigationStyle": "custom" 
+		}
+	},
+	{
+		"path" : "component/infoCard",
+		"style" : 
+		{
+			"navigationBarTitleText" : ""
+		}
+	}
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

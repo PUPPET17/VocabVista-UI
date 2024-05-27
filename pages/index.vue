@@ -40,7 +40,6 @@
 </template>
 
 <script>
-	import {loginRequest} from "@/api/loginAndRegister";
 	import service from '../utils/axios';
 
 	export default {
