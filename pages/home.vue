@@ -3,7 +3,7 @@
     <view class="header">
       <view class="avatar"></view>
     </view>
-    <view class="content" v-if="jsonData">
+    <view class="content" >
 		<text class="title">Daily Word</text>
 		<view class="main-box">
 			<!-- 显示单词和音标 -->
@@ -45,6 +45,7 @@
 		// 在组件创建后立刻发起请求
 		created() {
 			this.fetchData();
+			this.getWordList();
 		},
 		methods: {
 			// 定义一个方法来获取数据
@@ -52,17 +53,24 @@
 				service.get('/interest/getInterestWord')
 					.then(response => {
 						this.jsonData = response.data;
-						console.log(response.data)
+						console.log('response.data:',response.data)
 					})
 					.catch(error => {
 						// 请求失败，打印错误信息
 						console.error('Error fetching data:', error);
 					});
 			},
-			learning(){
-				uni.navigateTo({
-					url:'/pages/word'
-				})
+			getWordList(){
+				service.post('/word/getWordList')
+					.then(response => {
+						this.jsonData = response.data;
+						localStorage.setItem('wordData', JSON.stringify(response.data));
+						console.log('response.data:',response.data)
+					})
+					.catch(error => {
+						// 请求失败，打印错误信息
+						console.error('Error fetching data:', error);
+					});
 			}
 		}
 	};
