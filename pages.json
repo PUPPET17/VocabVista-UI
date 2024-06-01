@@ -48,13 +48,6 @@
 		{
 			"navigationBarTitleText" : ""
 		}
-	},
-	{
-		"path" : "component/wordHeader",
-		"style" : 
-		{
-			"navigationBarTitleText" : ""
-		}
 	}
   ],
   "globalStyle": {
