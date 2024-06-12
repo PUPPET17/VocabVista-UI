@@ -177,6 +177,7 @@ export default {
 }
 
 .header {
+	margin-top: 18px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
