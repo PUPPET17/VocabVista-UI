@@ -1,8 +1,41 @@
 {
-  "navigationBarTitleText": "",
-  "enablePullDownRefresh": false,
-  "usingComponents": {}
-}#ffffff"
+  "pages": [
+    "pages/index",
+    "pages/home",
+    "pages/dashboard",
+    "pages/mine",
+    "pages/word",
+    "component/infoCard",
+    "pages/review"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home",
+        "iconPath": "static/icons/home.png",
+        "selectedIconPath": "static/icons/home.png"
+      },
+      {
+        "pagePath": "pages/dashboard",
+        "iconPath": "static/icons/dashboard.png",
+        "selectedIconPath": "static/icons/dashboard-selected.png"
+      },
+      {
+        "pagePath": "pages/mine",
+        "iconPath": "static/icons/mine.png",
+        "selectedIconPath": "static/icons/mine.png"
+      }
+    ]
   },
   "usingComponents": {}
 }
