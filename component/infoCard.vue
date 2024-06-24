@@ -29,18 +29,18 @@ export default {
 
 <style scoped>
 .card {
-  display: flex; /* 启用 Flexbox 布局 */
-  flex-direction: column; /* 设置子项垂直布局 */
-  cursor: pointer; /* 添加鼠标手势提醒用户可以点击 */
+  display: flex;
+  flex-direction: column;
+  cursor: pointer; 
   padding: 20px;
 }
 
 .title, .count {
-  color: #ef4444; /* 红色文本 */
+  color: #ef4444;
 }
 
 .title {
-  margin-bottom: 3px; /* title 和 count 之间的下边距 */
-  font-weight: 600; /* 字体加粗 */
+  margin-bottom: 3px; 
+  font-weight: 600;
 }
 </style>

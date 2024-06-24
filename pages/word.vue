@@ -3,13 +3,14 @@
 		<div class="header">
 			<div class="left-group">
 				<svg width="11" height="18" viewBox="0 0 11 18" fill="none" xmlns="http://www.w3.org/2000/svg"
-					@click="returnToHome">
+					@click="showModal">
 					<path d="M11 2.115L8.90688 0L0 9L8.90688 18L11 15.885L4.20108 9L11 2.115Z" fill="#9094B8" />
 				</svg><!-- 返回 -->
 				<span class="page">{{ paginationInfo }}</span>
 			</div>
 			<div class="icon-group">
-				<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<svg class="svg-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"
+					xmlns="http://www.w3.org/2000/svg" @click="addToFavList">
 					<path
 						d="M9.40217 2.87776C9.59424 2.48864 9.69028 2.29408 9.82065 2.23192C9.93408 2.17784 10.0659 2.17784 10.1793 2.23192C10.3097 2.29408 10.4057 2.48864 10.5978 2.87776L12.42 6.5694C12.4767 6.68427 12.5051 6.74171 12.5465 6.78631C12.5832 6.82579 12.6272 6.85779 12.6761 6.88051C12.7313 6.90618 12.7946 6.91544 12.9214 6.93397L16.9975 7.52975C17.4267 7.59249 17.6413 7.62386 17.7406 7.72869C17.827 7.8199 17.8677 7.94524 17.8512 8.06981C17.8323 8.21298 17.6769 8.36431 17.3662 8.66698L14.4178 11.5387C14.3259 11.6282 14.28 11.673 14.2503 11.7262C14.2241 11.7734 14.2072 11.8252 14.2007 11.8787C14.1934 11.9393 14.2042 12.0025 14.2259 12.1289L14.9216 16.1851C14.995 16.6129 15.0317 16.8268 14.9627 16.9537C14.9027 17.0642 14.7961 17.1416 14.6725 17.1646C14.5305 17.1909 14.3384 17.0899 13.9542 16.8878L10.3103 14.9715C10.1967 14.9118 10.14 14.882 10.0802 14.8702C10.0272 14.8598 9.97274 14.8598 9.91979 14.8702C9.85998 14.882 9.80321 14.9118 9.68967 14.9715L6.04573 16.8878C5.66156 17.0899 5.46947 17.1909 5.32744 17.1646C5.20386 17.1416 5.09723 17.0642 5.03724 16.9537C4.96829 16.8268 5.00498 16.6129 5.07835 16.1851L5.77403 12.1289C5.79572 12.0025 5.80656 11.9393 5.79923 11.8787C5.79273 11.8252 5.77589 11.7734 5.74963 11.7262C5.71998 11.673 5.67402 11.6282 5.58211 11.5387L2.63376 8.66698C2.32301 8.36431 2.16764 8.21298 2.14873 8.06981C2.13228 7.94524 2.17292 7.8199 2.25933 7.72869C2.35866 7.62386 2.57327 7.59249 3.0025 7.52975L7.07855 6.93397C7.20531 6.91544 7.26869 6.90618 7.32389 6.88051C7.37276 6.85779 7.41676 6.82579 7.45345 6.78631C7.49488 6.74171 7.52323 6.68427 7.57994 6.5694L9.40217 2.87776Z"
 						stroke="#9094B8" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
@@ -52,14 +53,17 @@
 		<button v-if="currentIndex < wordData.length - 1" @click="nextWord">下一个单词</button>
 		<button v-else @click="submitContext">完成学习</button>
 	</div>
+	<custom-modal :is-visible="modalVisible" :modal-content="modalContent" @confirm="onConfirm" @cancel="onCancel" />
 </template>
 
 <script>
+import CustomModal from '../component/CustomModal.vue';
 import service from '../utils/axios';
 
 export default {
 	name: 'FullPage',
 	components: {
+		CustomModal,
 	},
 	data() {
 		return {
@@ -67,7 +71,10 @@ export default {
 			wordData: JSON.parse(localStorage.getItem('wordData') || '[]'),
 			// 当前单词的索引
 			currentIndex: 0,
-			learningRecordList: []
+			learningRecordList: [],
+			favList: [],
+			modalVisible: false,
+			modalContent: '是否保存当前学习进度？'
 		};
 	},
 	computed: {
@@ -89,7 +96,48 @@ export default {
 		},
 	},
 	methods: {
-		// 切换到上一个单词
+		saveFavList() {
+			service.post('/word/addFav', this.favList)
+				.then(response => {
+					console.log(response.data);
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		},
+		shouldItFilled() {
+			const svgIcon = document.querySelector('.svg-icon');
+			const isFavorite = this.favList.some(record => record.wordId === this.currentWord.wordId);
+
+			console.log(isFavorite);
+			if (isFavorite) {
+				svgIcon.style.fill = '#ff0000';
+			} else {
+				svgIcon.style.fill = 'none';
+			}
+		},
+		addToFavList() {
+			const svgIcon = document.querySelector('.svg-icon');
+
+			if (svgIcon.style.fill === 'none' || svgIcon.style.fill === '') {
+				this.favList.push({
+					wordId: this.currentWord.wordId,
+					word: this.currentWord.word
+				});
+				console.log(this.favList);
+				svgIcon.style.fill = '#ff0000';
+			} else {
+				const index = this.favList.findIndex(record => record.wordId === this.currentWord.wordId);
+				if (index !== -1) {
+					this.favList.splice(index, 1);
+				}
+				this.favList.pop({
+					wordId: this.currentWord.wordId,
+					word: this.currentWord.word
+				});
+				svgIcon.style.fill = 'none';
+			}
+		},
 		prevWord() {
 			if (this.currentIndex > 0) {
 				if (this.learningRecordList.length > 0) {
@@ -97,58 +145,14 @@ export default {
 				}
 				this.currentIndex--;
 			}
-		},
-		// 返回首页
-		returnToHome() {
-			// 弹窗提示用户是否保存进度
-			uni.showModal({
-				title: '提示',
-				content: '是否保存当前学习进度？',
-				success: (res) => {
-					if (res.confirm) {
-						console.log('用户点击确定');
-						this.recordCurrentWord(); // 记录最后一个单词
-						uni.showToast({
-							title: '正在保存学习记录',
-							icon: 'none',
-							duration: 2000
-						});
-						service.post('/Review/setReviewList', this.learningRecordList)
-							.then(response => {
-								// 处理响应
-								console.log('学习记录保存成功', response);
-							})
-							.catch(error => {
-								// 处理错误
-								console.error('学习记录保存失败', error);
-							});
-						service.post('/word/getWordList')
-							.then(response => {
-								this.jsonData = response.data;
-								localStorage.removeItem('wordData');
-								localStorage.setItem('wordData', JSON.stringify(response.data));
-								uni.switchTab({
-									url: '/pages/home'
-								});
-							})
-							.catch(error => {
-								console.error('Error fetching data:', error);
-							});
-					} else if (res.cancel) {
-						console.log('用户点击取消');
-						uni.switchTab({
-							url: '/pages/home'
-						});
-					}
-				}
-			});
+			this.shouldItFilled()
 		},
 		recordCurrentWord() {
 			this.learningRecordList.push({
 				state: 0,
 				wordId: this.currentWord.wordId
 			});
-			console.log('Learning Record:', this.learningRecordList);
+			// console.log('Learning Record:', this.learningRecordList);
 		},
 		jumpToNext() {
 			this.learningRecordList.push({
@@ -157,6 +161,7 @@ export default {
 			});
 			if (this.currentIndex < this.wordData.length - 1) {
 				this.currentIndex++;
+				this.shouldItFilled();
 			} else {
 				// 如果已经是最后一个单词，执行提交操作
 				this.submitContext();
@@ -167,6 +172,7 @@ export default {
 			this.recordCurrentWord();
 			if (this.currentIndex < this.wordData.length - 1) {
 				this.currentIndex++;
+				this.shouldItFilled();
 			} else {
 				// 如果已经是最后一个单词，执行提交操作
 				this.submitContext();
@@ -194,6 +200,48 @@ export default {
 					// 处理错误
 					console.error('学习记录保存失败', error);
 				});
+				this.saveFavList();
+		},
+		showModal() {
+			this.modalVisible = true;
+		},
+		onConfirm() {
+			this.recordCurrentWord();
+
+			uni.showToast({
+				title: '正在保存学习记录',
+				icon: 'none',
+				duration: 2000
+			});
+			this.saveFavList();
+			service.post('/Review/setReviewList', this.learningRecordList)
+				.then(response => {
+					console.log('学习记录保存成功', response);
+				})
+				.catch(error => {
+					console.error('学习记录保存失败', error);
+				});
+			service.post('/word/getWordList')
+				.then(response => {
+					this.jsonData = response.data;
+					localStorage.removeItem('wordData');
+					localStorage.setItem('wordData', JSON.stringify(response.data));
+					uni.switchTab({
+						url: '/pages/home'
+					});
+				})
+				.catch(error => {
+					console.error('Error fetching data:', error);
+				});
+			// 关闭弹窗
+			this.modalVisible = false;
+		},
+		onCancel() {
+			console.log('用户点击取消');
+			uni.switchTab({
+				url: '/pages/home'
+			});
+			this.modalVisible = false;
 		}
 	}
 };
@@ -311,5 +359,14 @@ export default {
 	justify-content: space-around;
 	padding: 10px 0;
 	background-color: #fff;
+}
+
+.svg-icon {
+	transition: fill 0.3s;
+	fill: none;
+}
+
+.svg-icon:hover {
+	cursor: pointer;
 }
 </style>
