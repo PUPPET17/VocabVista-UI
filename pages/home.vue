@@ -11,18 +11,20 @@
 				<text>{{ jsonData.definition }}</text>
 			</view> -->
 			<view class="main-box">
-				<text style="color: black;">{{ jsonData.word }}</text>
+				<text style="color: #ef4444;font-weight: 700;">{{ jsonData.word }}</text>
+
 				<view v-if="jsonData.definitions && jsonData.definitions.length">
-					<text>定义:</text>
+					<text style="color: black;">定义:</text>
 					<view v-for="(definition, index) in jsonData.definitions" :key="index">
 						<text>{{ index + 1 }}. {{ definition.text }} ({{ definition.partOfSpeech }})</text>
 					</view>
 				</view>
+
 				<view v-if="jsonData.examples && jsonData.examples.length">
-					<text>例句:</text>
+					<text style="color: black;">例句:</text>
 					<view v-for="(example, index) in jsonData.examples" :key="index">
-						<text>{{ index + 1 }}. {{ example.text }} - <text
-								style="font-style: italic;">{{ example.title }}</text></text>
+						<text v-html="formatExample(example.text, jsonData.word)"></text> - <text
+							style="font-style: italic;">{{ example.title }}</text>
 					</view>
 				</view>
 			</view>
@@ -56,14 +58,12 @@
 			// 	return JSON.stringify(this.jsonData, null, 2);
 			// }
 		},
-		// 在组件创建后立刻发起请求
 		created() {
 			// this.fetchData();
 			this.getInterestFromWordNik();
 			this.getWordList();
 		},
 		methods: {
-			// 定义一个方法来获取数据
 			fetchData() {
 				service.get('/interest/getInterestWord')
 					.then(response => {
@@ -71,7 +71,6 @@
 						console.log('response.data:', response.data)
 					})
 					.catch(error => {
-						// 请求失败，打印错误信息
 						console.error('Error fetching data:', error);
 					});
 			},
@@ -82,7 +81,6 @@
 						console.log('response.data:', response.data)
 					})
 					.catch(error => {
-						// 请求失败，打印错误信息
 						console.error('Error fetching data:', error);
 					});
 			},
@@ -94,9 +92,12 @@
 						console.log('response.data:', response.data)
 					})
 					.catch(error => {
-						// 请求失败，打印错误信息
 						console.error('Error fetching data:', error);
 					});
+			},
+			formatExample(exampleText, word) {
+				const boldedWord = `<strong><u>${word}</u></strong>`;
+				return exampleText.replace(new RegExp(`\\b${word}\\b`, 'gi'), boldedWord);
 			}
 		}
 	};
@@ -121,7 +122,6 @@
 		height: 50px;
 		border-radius: 50%;
 		background-color: #ddd;
-		/* 用于头像的占位背景颜色 */
 		margin-right: 15px;
 	}
 
@@ -159,23 +159,18 @@
 
 	.main-box text {
 		display: block;
-		/* 使 text 元素成为块级元素 */
 		color: #ef4444;
-		/* 红色文本 */
 		margin-bottom: 10px;
-		/* 在元素之间添加一些空间 */
 	}
 
 	.sub-boxes {
 		display: flex;
 		justify-content: space-between;
 		gap: 5%;
-		/* 在flex元素之间创建间隙 */
 	}
 
 	.sub-box {
 		flex: 1;
-		/* 允许两个卡片根据可用空间伸缩 */
 		background-color: #ffeded;
 		border-radius: 22px;
 		padding: 15px;

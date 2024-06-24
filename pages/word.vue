@@ -47,8 +47,9 @@
 		</div>
 	</div>
 	<div class="pagination-buttons">
-		<button @click="prevWord">上一个单词</button>
-		<button @click="nextWord">下一个单词</button>
+		<button @click="prevWord" :disabled="currentIndex === 0">上一个单词</button>
+		<button v-if="currentIndex < wordData.length - 1" @click="nextWord">下一个单词</button>
+		<button v-else @click="submitContext">完成学习</button>
 	</div>
 </template>
 
@@ -97,13 +98,19 @@ export default {
 				this.currentIndex--;
 			}
 		},
+		// 返回首页
 		returnToHome() {
 			uni.switchTab({
 				url: '/pages/home'
-			})
+			});
+		},
+		// 完成学习后的操作
+		submitContext() {
+			// 在此处添加完成学习后的操作
+			console.log("学习完成");
 		}
 	}
-}
+};
 </script>
 
 <style scoped>
