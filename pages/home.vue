@@ -61,6 +61,7 @@
 		created() {
 			// this.fetchData();
 			this.getInterestFromWordNik();
+			localStorage.removeItem('wordData');
 			this.getWordList();
 		},
 		methods: {
