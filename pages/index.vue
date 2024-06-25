@@ -70,7 +70,7 @@
 					password: this.password
 				})
 				.then(response => {
-					console.log('Login successful', response.data);
+					// console.log('Login successful', response.data);
 					localStorage.setItem('token', response.data.token);
 					uni.switchTab({
 						url:'/pages/home'
@@ -78,7 +78,7 @@
 				})
 				.catch(error => {
 				    if (error.response && error.response.status === 401) {
-				        console.log('Auth failed:', error.response.data);
+				        // console.log('Auth failed:', error.response.data);
 				        uni.showToast({
 				            title: '登录失败，请检查您的凭证',
 				            icon: 'none',
@@ -103,7 +103,7 @@
 				})
 				.then(response => {
 					if (response.data===0) {
-						console.log('Registration faild:', response.data);
+						// console.log('Registration faild:', response.data);
 						uni.showToast({
 						    title: 'Registration faild:用户名已存在',
 						    icon: 'none',

@@ -1,5 +1,6 @@
 import App from './App'
 import axios from '/utils/axios.js'
+import 'element-plus/dist/index.css';
 
 // #ifndef VUE3
 import Vue from 'vue'

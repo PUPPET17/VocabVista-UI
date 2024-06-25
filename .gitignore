@@ -45,3 +45,4 @@ unpackage/dist/dev/mp-weixin/static/icons/home-selected.png
 unpackage/dist/dev/mp-weixin/static/icons/home.png
 unpackage/dist/dev/mp-weixin/static/icons/mine.png
 unpackage/dist/dev/mp-weixin/utils/axios.js
+node_modules

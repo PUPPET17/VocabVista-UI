@@ -65,7 +65,7 @@
       {
         "pagePath": "pages/home",
         "iconPath": "static/icons/home.png",
-        "selectedIconPath": "static/icons/home.png"
+        "selectedIconPath": "static/icons/home-selected.png"
       },
       {
         "pagePath": "pages/dashboard",

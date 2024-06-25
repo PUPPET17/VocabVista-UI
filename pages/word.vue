@@ -33,11 +33,14 @@
 				<p class="tip">先回想词义再选择，想不起来看答案</p>
 			</div>
 			<div class="answers">
-				<div class="answer">
+				<div class="answer" @click="toggleTranslation">
 					<h5>Translation</h5>
-					<span v-for="(line, index) in translationLines" :key="index">
+					<span v-for="(line, index) in translationLines" :key="index" v-if="showTranslation">
 						{{ line }}<br>
 					</span>
+					<div v-else class="mask">
+						点击查看翻译
+					</div>
 				</div>
 				<div class="answer">
 					<h5>Definition</h5>
@@ -74,8 +77,16 @@ export default {
 			learningRecordList: [],
 			favList: [],
 			modalVisible: false,
-			modalContent: '是否保存当前学习进度？'
+			modalContent: '是否保存当前学习进度？',
+			showTranslation: false
 		};
+	},
+	watch: {
+		currentIndex() {
+			this.showTranslation = false;
+		}
+	},
+	mounted() {
 	},
 	computed: {
 		// 计算属性用于根据当前索引获取当前单词
@@ -137,6 +148,9 @@ export default {
 				});
 				svgIcon.style.fill = 'none';
 			}
+		},
+		toggleTranslation() {
+			this.showTranslation = !this.showTranslation;
 		},
 		prevWord() {
 			if (this.currentIndex > 0) {
@@ -200,7 +214,7 @@ export default {
 					// 处理错误
 					console.error('学习记录保存失败', error);
 				});
-				this.saveFavList();
+			this.saveFavList();
 		},
 		showModal() {
 			this.modalVisible = true;
@@ -291,10 +305,31 @@ export default {
 }
 
 .answer {
-	padding: 16px;
-	background-color: var(--color-light-red, #fee2e2);
-	border-radius: 18px;
-	white-space: pre-line;
+    padding: 16px;
+    background-color: var(--color-light-red, #fee2e2);
+    border-radius: 18px;
+    white-space: pre-line;
+    position: relative;
+    font-size: 16px; /* 假定的字体大小 */
+    line-height: 24px; /* 假定的行高 */
+}
+
+.mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #9094B8;
+    padding-top: 12px; /* 基于行高的一半 */
+    padding-bottom: 12px; /* 基于行高的一半 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    text-align: center;
+    z-index: 1;
 }
 
 /* Dark mode styles */
