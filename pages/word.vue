@@ -28,7 +28,7 @@
 		</div>
 		<div class="card-body">
 			<div class="content">
-				<h1 class="word">{{ currentWord.word }}</h1>
+				<p class="word">{{ currentWord.word }}</p>
 				<p class="phonetic">/{{ currentWord.phonetic }}/</p>
 				<p class="tip">先回想词义再选择，想不起来看答案</p>
 			</div>
@@ -64,7 +64,7 @@ import CustomModal from '../component/CustomModal.vue';
 import service from '../utils/axios';
 
 export default {
-	name: 'FullPage',
+	name: 'word',
 	components: {
 		CustomModal,
 	},
@@ -116,7 +116,7 @@ export default {
 					console.error(error);
 				});
 		},
-		shouldItFilled() {
+		shouldFavIconFilled() {
 			const svgIcon = document.querySelector('.svg-icon');
 			const isFavorite = this.favList.some(record => record.wordId === this.currentWord.wordId);
 
@@ -159,7 +159,7 @@ export default {
 				}
 				this.currentIndex--;
 			}
-			this.shouldItFilled()
+			this.shouldFavIconFilled()
 		},
 		recordCurrentWord() {
 			this.learningRecordList.push({
@@ -175,7 +175,7 @@ export default {
 			});
 			if (this.currentIndex < this.wordData.length - 1) {
 				this.currentIndex++;
-				this.shouldItFilled();
+				this.shouldFavIconFilled();
 			} else {
 				// 如果已经是最后一个单词，执行提交操作
 				this.submitContext();
@@ -186,7 +186,7 @@ export default {
 			this.recordCurrentWord();
 			if (this.currentIndex < this.wordData.length - 1) {
 				this.currentIndex++;
-				this.shouldItFilled();
+				this.shouldFavIconFilled();
 			} else {
 				// 如果已经是最后一个单词，执行提交操作
 				this.submitContext();
@@ -205,16 +205,29 @@ export default {
 			service.post('/Review/setReviewList', this.learningRecordList)
 				.then(response => {
 					// 处理响应
-					console.log('学习记录保存成功', response);
-					uni.switchTab({
-						url: '/pages/home'
-					});
+					console.log('学习记录保存成功', response)
 				})
 				.catch(error => {
 					// 处理错误
 					console.error('学习记录保存失败', error);
 				});
-			this.saveFavList();
+			service.post('/word/getWordList')
+				.then(response => {
+					this.jsonData = response.data;
+					localStorage.removeItem('wordData');
+					console.log(localStorage.getItem('wordData'));
+					localStorage.setItem('wordData', JSON.stringify(response.data));
+					uni.switchTab({
+						url: '/pages/home'
+					});
+				})
+				.catch(error => {
+					console.error('Error fetching data:', error);
+				});
+			if (this.favList.length > 0) {
+				this.saveFavList();
+			}
+
 		},
 		showModal() {
 			this.modalVisible = true;
@@ -227,10 +240,13 @@ export default {
 				icon: 'none',
 				duration: 2000
 			});
-			this.saveFavList();
+			if (this.favList.length > 0) {
+				this.saveFavList();
+			}
 			service.post('/Review/setReviewList', this.learningRecordList)
 				.then(response => {
 					console.log('学习记录保存成功', response);
+
 				})
 				.catch(error => {
 					console.error('学习记录保存失败', error);
@@ -239,6 +255,7 @@ export default {
 				.then(response => {
 					this.jsonData = response.data;
 					localStorage.removeItem('wordData');
+					console.log(localStorage.getItem('wordData'));
 					localStorage.setItem('wordData', JSON.stringify(response.data));
 					uni.switchTab({
 						url: '/pages/home'
@@ -249,6 +266,7 @@ export default {
 				});
 			// 关闭弹窗
 			this.modalVisible = false;
+
 		},
 		onCancel() {
 			console.log('用户点击取消');
@@ -283,7 +301,7 @@ export default {
 
 .word {
 	margin-left: 16px;
-	font-size: 24px;
+	font-size: 30px;
 	font-weight: bold;
 }
 
@@ -305,31 +323,35 @@ export default {
 }
 
 .answer {
-    padding: 16px;
-    background-color: var(--color-light-red, #fee2e2);
-    border-radius: 18px;
-    white-space: pre-line;
-    position: relative;
-    font-size: 16px; /* 假定的字体大小 */
-    line-height: 24px; /* 假定的行高 */
+	padding: 16px;
+	background-color: var(--color-light-red, #fee2e2);
+	border-radius: 18px;
+	white-space: pre-line;
+	position: relative;
+	font-size: 16px;
+	/* 假定的字体大小 */
+	line-height: 24px;
+	/* 假定的行高 */
 }
 
 .mask {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.3);
-    color: #9094B8;
-    padding-top: 12px; /* 基于行高的一半 */
-    padding-bottom: 12px; /* 基于行高的一半 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 18px;
-    text-align: center;
-    z-index: 1;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255, 255, 255, 0.3);
+	color: #9094B8;
+	padding-top: 12px;
+	/* 基于行高的一半 */
+	padding-bottom: 12px;
+	/* 基于行高的一半 */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 18px;
+	text-align: center;
+	z-index: 1;
 }
 
 /* Dark mode styles */

@@ -24,7 +24,8 @@
 					<text style="color: black;">例句:</text>
 					<view v-for="(example, index) in jsonData.examples" :key="index">
 						<text v-html="formatExample(example.text, jsonData.word)"></text>
-						<text style="display: block; margin-left: 10px; text-align: right; font-style: italic;">- {{ example.title }}</text>
+						<text style="display: block; margin-left: 10px; text-align: right; font-style: italic;">- {{
+							example.title }}</text>
 					</view>
 				</view>
 			</view>
@@ -49,7 +50,7 @@ export default {
 		return {
 			jsonData: null, // 初始时jsonData为空，等待数据加载
 			learnCount: 1,
-			reviewCount: 1,
+			reviewCount: 20,
 			dictInfo: []
 		};
 	},
@@ -65,6 +66,7 @@ export default {
 		localStorage.removeItem('wordData');
 		this.getWordList();
 		this.getDictInfo();
+		this.getReviewList();
 	},
 	methods: {
 		fetchData() {
@@ -108,6 +110,19 @@ export default {
 					this.dictInfo = response.data;
 					localStorage.setItem('dictInfo', JSON.stringify(response.data));
 					console.log('dictInfo:', this.dictInfo)
+				})
+				.catch(error => {
+					// console.error('Error fetching data:', error);
+				});
+		},
+		getReviewList() {
+			service.post('/Review/getReviewList', null, {
+				params: {
+					radius: 20
+				}
+			})
+				.then(response => {
+					localStorage.setItem('reviewList', JSON.stringify(response.data));
 				})
 				.catch(error => {
 					// console.error('Error fetching data:', error);

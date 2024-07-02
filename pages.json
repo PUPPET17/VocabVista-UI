@@ -36,14 +36,15 @@
 		}
 	},
 	{
-		"path" : "component/infoCard",
+		"path" : "pages/review",
 		"style" : 
 		{
-			"navigationBarTitleText" : ""
+			"navigationBarTitleText" : "复习",
+			"navigationStyle": "custom" 
 		}
 	},
 	{
-		"path" : "pages/review",
+		"path" : "component/infoCard",
 		"style" : 
 		{
 			"navigationBarTitleText" : ""

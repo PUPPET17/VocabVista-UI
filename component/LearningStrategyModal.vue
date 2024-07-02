@@ -2,7 +2,8 @@
   <div v-if="isVisible" class="custom-modal">
     <div class="modal-content">
       <div class="flip-card__front">
-        <select class="flip-card__input" name="dictInfo" id="dictInfo-select" style="color: grey" v-model="dictId" placeholder="请选择你想学习的词书">
+        <select class="flip-card__input" name="dictInfo" id="dictInfo-select" style="color: grey" v-model="dictId"
+          placeholder="请选择你想学习的词书">
           <option value="" disabled selected>--请选择你想学习的词书--</option>
           <option value="1">CET4</option>
           <option value="2">CET6</option>
@@ -10,7 +11,8 @@
           <option value="4">IELTS</option>
           <option value="5">TOEFL</option>
         </select>
-        <select class="flip-card__input" name="radius" id="radius-select" style="color: grey" v-model="count" placeholder="请选择单次学习的词数">
+        <select class="flip-card__input" name="radius" id="radius-select" style="color: grey" v-model="count"
+          placeholder="请选择单次学习的词数">
           <option value="" disabled selected>--请选择单次学习的词数--</option>
           <option value="5">5</option>
           <option value="10">10</option>
@@ -54,9 +56,29 @@ export default {
       })
         .then(response => {
           console.log('Learning strategy set successfully', response.data);
+          service.post('/word/getWordList')
+            .then(response => {
+              this.jsonData = response.data;
+              localStorage.removeItem('wordData');
+              console.log(localStorage.getItem('wordData'));
+              localStorage.setItem('wordData', JSON.stringify(response.data));
+              uni.showToast({
+                title: '学习策略设置成功',
+                icon: 'success',
+                duration: 2000,
+              });
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+            });
         })
         .catch(error => {
           console.error('Error setting learning strategy:', error);
+          uni.showToast({
+            title: '学习策略设置失败',
+            icon: 'none',
+            duration: 2000,
+          });
         });
       this.$emit('confirm');
     },

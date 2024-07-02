@@ -25,7 +25,9 @@
 				<template #header>
 					<div class="section-title">My archieve</div>
 				</template>
-				<div class="archive-container"></div>
+				<div class="archive-container">
+					待开发
+				</div>
 			</el-card>
 		</el-main>
 	</el-container>
@@ -49,7 +51,7 @@ export default {
 	},
 	data() {
 		return {
-			progress: 70,
+			progress: 73.999,
 			modalVisible: false,
 			dictId: 0,
 			count: 0,
