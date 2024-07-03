@@ -43,7 +43,7 @@
 					@click="nextWord(index)">
 					<h5>{{ String.fromCharCode(97 + index).toUpperCase() }}. </h5>
 					<span v-for="(line, lineIndex) in translation" :key="lineIndex">
-						{{ line }}<br/>
+						{{ line }}<br />
 					</span>
 				</div>
 			</div>
@@ -202,25 +202,21 @@ export default {
 		},
 		// 切换到下一个单词
 		nextWord(index) {
-
 			if (index === this.correctAnswerIndex) {
 				this.recordCurrentWord();
-
 				if (this.currentIndex < this.wordData.length - 1) {
 					this.currentIndex++;
 					this.shouldFavIconFilled();
 				} else {
 					this.submitContext();
 				}
-			}
-			else {
+			}else {
 				uni.showToast({
 					title: '回答错误',
 					icon: 'none',
 					duration: 1000
 				});
 			}
-
 		},
 		// 完成学习后的操作
 		submitContext() {
@@ -254,10 +250,24 @@ export default {
 				.catch(error => {
 					console.error('Error fetching data:', error);
 				});
+			this.getReviewList();
 			if (this.favList.length > 0) {
 				this.saveFavList();
 			}
-
+		},
+		getReviewList() {
+			service.post('/Review/getReviewList', null, {
+				params: {
+					radius: 20
+				}
+			})
+				.then(response => {
+					localStorage.removeItem('reviewList');
+					localStorage.setItem('reviewList', JSON.stringify(response.data));
+				})
+				.catch(error => {
+					// console.error('Error fetching data:', error);
+				});
 		},
 		showModal() {
 			this.modalVisible = true;
@@ -294,6 +304,7 @@ export default {
 				.catch(error => {
 					console.error('Error fetching data:', error);
 				});
+			this.getReviewList();
 			// 关闭弹窗
 			this.modalVisible = false;
 
@@ -326,15 +337,15 @@ export default {
 	border-radius: 0.5rem;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
 	color: var(--color-dark, #111827);
-	min-height: 100vh; 
-	justify-content: flex-end; 
+	min-height: 100vh;
+	justify-content: flex-end;
 	display: flexbox;
 }
 
 .card-body {
 	padding-left: 16px;
 	padding-right: 16px;
-	
+
 	align-items: end;
 }
 
@@ -376,6 +387,12 @@ export default {
 	line-height: 24px;
 	/* 假定的行高 */
 	display: flex-box;
+}
+
+.answer:active {
+	position: relative;
+	top: 1px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .mask {
@@ -455,7 +472,7 @@ export default {
 	position: fixed;
 	bottom: 20px;
 	right: 20px;
-	z-index: 999;
+	z-index: 1;
 	/* 确保按钮在其他元素之上 */
 }
 

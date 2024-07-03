@@ -30,7 +30,7 @@
 				</view>
 			</view>
 			<view class="sub-boxes">
-				<info-card class="sub-box" title="Learn" :count="learnCount" targetUrl="/pages/word" />
+				<info-card class="sub-box" title="Learned" :count="learnCount" targetUrl="/pages/word" />
 				<info-card class="sub-box" title="Review" :count="reviewCount" targetUrl="/pages/review" />
 			</view>
 		</view>
@@ -59,6 +59,9 @@ export default {
 		// formattedJson() {
 		// 	return JSON.stringify(this.jsonData, null, 2);
 		// }
+	},
+	onShow(){
+		this.getBasicInfo();
 	},
 	created() {
 		// this.fetchData();
@@ -113,6 +116,17 @@ export default {
 				})
 				.catch(error => {
 					// console.error('Error fetching data:', error);
+				});
+		},
+		getBasicInfo() {
+			service.post('/basic/getBasicInfo')
+				.then(response => {
+					this.learnCount = response.data.remainCount;
+					this.reviewCount = response.data.tobeReviewedCount;
+					localStorage.setItem('learnCount', this.learnCount);
+				})
+				.catch(error => {
+					console.error('Error fetching data:', error);
 				});
 		},
 		getReviewList() {

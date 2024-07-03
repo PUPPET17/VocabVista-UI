@@ -50,12 +50,13 @@
 				</div>
 			</div>
 		</div>
+		<div class="pagination-buttons">
+			<button @click="prevWord" :disabled="currentIndex === 0">上一个单词</button>
+			<button v-if="currentIndex < wordData.length - 1" @click="nextWord">下一个单词</button>
+			<button v-else @click="submitContext">完成学习</button>
+		</div>
 	</div>
-	<div class="pagination-buttons">
-		<button @click="prevWord" :disabled="currentIndex === 0">上一个单词</button>
-		<button v-if="currentIndex < wordData.length - 1" @click="nextWord">下一个单词</button>
-		<button v-else @click="submitContext">完成学习</button>
-	</div>
+
 	<custom-modal :is-visible="modalVisible" :modal-content="modalContent" @confirm="onConfirm" @cancel="onCancel" />
 </template>
 
@@ -288,12 +289,18 @@ export default {
 	border-radius: 0.5rem;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
 	color: var(--color-dark, #111827);
+	min-height: 100vh;
+	justify-content: flex-end;
+	display: flexbox;
 }
 
 .card-body {
 	padding-left: 16px;
 	padding-right: 16px;
+
+	align-items: end;
 }
+
 
 .content {
 	margin-bottom: 20px;

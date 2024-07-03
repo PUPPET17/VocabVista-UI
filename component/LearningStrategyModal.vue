@@ -2,8 +2,7 @@
   <div v-if="isVisible" class="custom-modal">
     <div class="modal-content">
       <div class="flip-card__front">
-        <select class="flip-card__input" name="dictInfo" id="dictInfo-select" style="color: grey" v-model="dictId"
-          placeholder="请选择你想学习的词书">
+        <select class="flip-card__input" name="dictInfo" id="dictInfo-select" style="color: grey" v-model="dictId">
           <option value="" disabled selected>--请选择你想学习的词书--</option>
           <option value="1">CET4</option>
           <option value="2">CET6</option>
@@ -11,8 +10,7 @@
           <option value="4">IELTS</option>
           <option value="5">TOEFL</option>
         </select>
-        <select class="flip-card__input" name="radius" id="radius-select" style="color: grey" v-model="count"
-          placeholder="请选择单次学习的词数">
+        <select class="flip-card__input" name="radius" id="radius-select" style="color: grey" v-model="count">
           <option value="" disabled selected>--请选择单次学习的词数--</option>
           <option value="5">5</option>
           <option value="10">10</option>
