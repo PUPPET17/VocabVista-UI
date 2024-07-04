@@ -123,6 +123,7 @@ export default {
 				.then(response => {
 					this.learnCount = response.data.remainCount;
 					this.reviewCount = response.data.tobeReviewedCount;
+					localStorage.removeItem('learnCount');
 					localStorage.setItem('learnCount', this.learnCount);
 				})
 				.catch(error => {
@@ -146,7 +147,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
 	display: flex;
 	flex-direction: column;

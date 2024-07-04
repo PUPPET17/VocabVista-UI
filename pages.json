@@ -42,13 +42,6 @@
 			"navigationBarTitleText" : "复习",
 			"navigationStyle": "custom" 
 		}
-	},
-	{
-		"path" : "component/infoCard",
-		"style" : 
-		{
-			"navigationBarTitleText" : ""
-		}
 	}
   ],
   "globalStyle": {

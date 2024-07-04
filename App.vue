@@ -15,13 +15,13 @@ export default {
 }
 </script>
 
-<style>
-html {
-	scrollbar-width: none;
-	-ms-overflow-style: none;
-}
+<style lang="scss">
+// html {
+// 	scrollbar-width: none;
+// 	-ms-overflow-style: none;
+// }
 
-body::-webkit-scrollbar {
-	display: none;
-}
+// body::-webkit-scrollbar {
+// 	display: none;
+// }
 </style>

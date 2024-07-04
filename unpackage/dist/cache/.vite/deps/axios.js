@@ -1,6 +1,8 @@
-import {
-  __export
-} from "./chunk-MNTBHR2J.js";
+var __defProp = Object.defineProperty;
+var __export = (target, all3) => {
+  for (var name in all3)
+    __defProp(target, name, { get: all3[name], enumerable: true });
+};
 
 // C:/Users/10023/Desktop/fun/VocabVista-UI/node_modules/axios/lib/helpers/bind.js
 function bind(fn, thisArg) {

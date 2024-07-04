@@ -328,7 +328,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .card {
 	max-width: 28rem;
 	margin: auto;

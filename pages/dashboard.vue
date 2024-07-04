@@ -32,6 +32,8 @@
 
 <script>
 import LearningStrategyModal from '../component/LearningStrategyModal.vue';
+import service from '../utils/axios';
+import {localStorage} from '@system.storage'
 
 export default {
 	name: "Dashboard",
@@ -61,15 +63,31 @@ export default {
 		onConfirm(data) {
 			// 关闭弹窗
 			this.modalVisible = false;
+			this.getBasicInfo();
+			setTimeout(() => {
+				location.reload();
+			}, 200);
 		},
 		onCancel() {
 			this.modalVisible = false;
-		}
+		},
+		getBasicInfo() {
+			service.post('/basic/getBasicInfo')
+				.then(response => {
+					this.learnCount = response.data.remainCount;
+					this.reviewCount = response.data.tobeReviewedCount;
+					localStorage.removeItem('learnCount');
+					localStorage.setItem('learnCount', this.learnCount);
+				})
+				.catch(error => {
+					console.error('Error fetching data:', error);
+				});
+		},
 	},
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
 	display: flex;
 	flex-direction: column;
