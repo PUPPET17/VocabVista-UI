@@ -106,7 +106,7 @@ export default {
 .progress-bar {
 	width: 100%;
 	background-color: #f5f5f5;
-	border-radius: 0.25rem;
+	border-radius: 6px;
 	overflow: hidden;
 	margin-top: 10px;
 }

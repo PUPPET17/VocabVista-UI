@@ -13,7 +13,7 @@
 			<view class="main-box">
 				<text style="color: #ef4444;font-weight: 700;">{{ jsonData.word }}</text>
 
-				<view v-if="jsonData.definitions && jsonData.definitions.length">
+				<view>
 					<text style="color: black;">定义:</text>
 					<view v-for="(definition, index) in jsonData.definitions" :key="index">
 						<text>{{ index + 1 }}. {{ definition.text }} ({{ definition.partOfSpeech }})</text>
@@ -60,7 +60,7 @@ export default {
 		// 	return JSON.stringify(this.jsonData, null, 2);
 		// }
 	},
-	onShow(){
+	onShow() {
 		this.getBasicInfo();
 	},
 	created() {
@@ -177,11 +177,8 @@ export default {
 	font-size: 36px;
 	line-height: 45px;
 	margin-bottom: 10%;
-
 	color: #252525;
-
 	mix-blend-mode: normal;
-
 }
 
 .content {

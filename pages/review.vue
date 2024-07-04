@@ -210,7 +210,7 @@ export default {
 				} else {
 					this.submitContext();
 				}
-			}else {
+			} else {
 				uni.showToast({
 					title: '回答错误',
 					icon: 'none',

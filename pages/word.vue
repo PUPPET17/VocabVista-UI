@@ -33,6 +33,12 @@
 				<p class="tip">先回想词义再选择，想不起来看答案</p>
 			</div>
 			<div class="answers">
+				<div class="answer">
+					<h5>Definition</h5>
+					<span v-for="(line, index) in definitionLines" :key="index">
+						{{ line }}<br>
+					</span>
+				</div>
 				<div class="answer" @click="toggleTranslation">
 					<h5>Translation</h5>
 					<span v-for="(line, index) in translationLines" :key="index" v-if="showTranslation">
@@ -41,12 +47,6 @@
 					<div v-else class="mask">
 						点击查看翻译
 					</div>
-				</div>
-				<div class="answer">
-					<h5>Definition</h5>
-					<span v-for="(line, index) in definitionLines" :key="index">
-						{{ line }}<br>
-					</span>
 				</div>
 			</div>
 		</div>

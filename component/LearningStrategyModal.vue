@@ -58,7 +58,6 @@ export default {
             .then(response => {
               this.jsonData = response.data;
               localStorage.removeItem('wordData');
-              console.log(localStorage.getItem('wordData'));
               localStorage.setItem('wordData', JSON.stringify(response.data));
               uni.showToast({
                 title: '学习策略设置成功',
