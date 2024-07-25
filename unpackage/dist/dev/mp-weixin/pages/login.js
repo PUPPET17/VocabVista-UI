@@ -30,12 +30,14 @@ const _sfc_main = {
           username: this.nickname,
           password: this.password
         }).then((response) => {
-          localStorage.setItem("token", response.data.token);
+          console.log("Login successful", response.data.token);
+          common_vendor.index.setStorageSync("token", response.data.token);
           common_vendor.index.switchTab({
             url: "/pages/home"
           });
         }).catch((error) => {
-          if (error.response && error.response.status === 401) {
+          if (error.response || error.response.status === 401) {
+            console.log("Auth failed:", error.response.data);
             common_vendor.index.showToast({
               title: "登录失败，请检查您的凭证",
               icon: "none",

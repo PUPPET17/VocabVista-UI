@@ -72,7 +72,7 @@ export default {
 	data() {
 		return {
 			// 初始化单词数据数组
-			wordData: JSON.parse(localStorage.getItem('wordData') || '[]'),
+			wordData: JSON.parse(uni.getStorageSync('wordData') || '[]'),
 			// 当前单词的索引
 			currentIndex: 0,
 			learningRecordList: [],
@@ -206,7 +206,7 @@ export default {
 			service.post('/Review/setReviewList', this.learningRecordList)
 				.then(response => {
 					// 处理响应
-					console.log('学习记录保存成功', response)
+					console.log('学习记录保存成功', response.data)
 				})
 				.catch(error => {
 					// 处理错误
@@ -215,9 +215,9 @@ export default {
 			service.post('/word/getWordList')
 				.then(response => {
 					this.jsonData = response.data;
-					localStorage.removeItem('wordData');
-					console.log(localStorage.getItem('wordData'));
-					localStorage.setItem('wordData', JSON.stringify(response.data));
+					uni.removeStorageSync('wordData');
+					console.log(uni.getStorageSync('wordData'));
+					uni.setStorageSync('wordData', JSON.stringify(response.data));
 					uni.switchTab({
 						url: '/pages/home'
 					});
@@ -247,7 +247,6 @@ export default {
 			service.post('/Review/setReviewList', this.learningRecordList)
 				.then(response => {
 					console.log('学习记录保存成功', response);
-
 				})
 				.catch(error => {
 					console.error('学习记录保存失败', error);
@@ -255,9 +254,9 @@ export default {
 			service.post('/word/getWordList')
 				.then(response => {
 					this.jsonData = response.data;
-					localStorage.removeItem('wordData');
-					console.log(localStorage.getItem('wordData'));
-					localStorage.setItem('wordData', JSON.stringify(response.data));
+					uni.removeStorageSync('wordData');
+					console.log(uni.getStorageSync('wordData'));
+					uni.setStorageSync('wordData', JSON.stringify(response.data));
 					uni.switchTab({
 						url: '/pages/home'
 					});

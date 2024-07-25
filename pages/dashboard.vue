@@ -33,7 +33,6 @@
 <script>
 import LearningStrategyModal from '../component/LearningStrategyModal.vue';
 import service from '../utils/axios';
-import {localStorage} from '@system.storage'
 
 export default {
 	name: "Dashboard",
@@ -45,14 +44,14 @@ export default {
 			modalVisible: false,
 			dictId: 0,
 			count: 0,
-			learned: localStorage.getItem('learnCount'),
-			Total: JSON.parse(localStorage.getItem('dictInfo'))[JSON.parse(localStorage.getItem('wordData'))[0].dictId].diceSize
+			learned: uni.getStorageSync('learnCount'),
+			Total: JSON.parse(uni.getStorageSync('dictInfo'))[JSON.parse(uni.getStorageSync('wordData'))[0].dictId - 1].diceSize
 		};
 	},
 	computed: {
 		computedProgress() {
-			const a = localStorage.getItem('learnCount') /
-				JSON.parse(localStorage.getItem('dictInfo'))[JSON.parse(localStorage.getItem('wordData'))[0].dictId].diceSize * 100;
+			const a = uni.getStorageSync('learnCount') /
+				JSON.parse(uni.getStorageSync('dictInfo'))[JSON.parse(uni.getStorageSync('wordData'))[0].dictId - 1].diceSize * 100;
 			return a.toFixed(2);
 		}
 	},
@@ -76,8 +75,13 @@ export default {
 				.then(response => {
 					this.learnCount = response.data.remainCount;
 					this.reviewCount = response.data.tobeReviewedCount;
-					localStorage.removeItem('learnCount');
-					localStorage.setItem('learnCount', this.learnCount);
+					uni.removeStorage({
+						key: 'learnCount',
+						success: function (res) {
+							console.log('success');
+						}
+					});
+					uni.setStorageSync('learnCount', this.learnCount);
 				})
 				.catch(error => {
 					console.error('Error fetching data:', error);

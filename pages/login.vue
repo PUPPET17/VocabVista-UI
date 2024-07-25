@@ -78,15 +78,15 @@ export default {
 					password: this.password
 				})
 					.then(response => {
-						// console.log('Login successful', response.data);
-						localStorage.setItem('token', response.data.token);
+						console.log('Login successful', response.data.token);
+						uni.setStorageSync('token', response.data.token);
 						uni.switchTab({
 							url: '/pages/home'
 						});
 					})
 					.catch(error => {
-						if (error.response && error.response.status === 401) {
-							// console.log('Auth failed:', error.response.data);
+						if (error.response || error.response.status === 401) {
+							console.log('Auth failed:', error.response.data);
 							uni.showToast({
 								title: '登录失败，请检查您的凭证',
 								icon: 'none',

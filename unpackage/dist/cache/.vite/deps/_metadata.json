@@ -1,15 +1,25 @@
 {
-  "hash": "37c76e60",
+  "hash": "76f7ce28",
   "configHash": "8dc2e062",
-  "lockfileHash": "ad7f130c",
-  "browserHash": "3f8444a2",
+  "lockfileHash": "dd207a1b",
+  "browserHash": "f0fded0b",
   "optimized": {
     "axios": {
       "src": "../../../../../node_modules/axios/index.js",
       "file": "axios.js",
-      "fileHash": "6b301996",
+      "fileHash": "f0665ed7",
+      "needsInterop": false
+    },
+    "uniapp-axios-adapter": {
+      "src": "../../../../../node_modules/uniapp-axios-adapter/lib/index.esm.js",
+      "file": "uniapp-axios-adapter.js",
+      "fileHash": "f3a658ae",
       "needsInterop": false
     }
   },
-  "chunks": {}
+  "chunks": {
+    "chunk-MPYS5INC": {
+      "file": "chunk-MPYS5INC.js"
+    }
+  }
 }

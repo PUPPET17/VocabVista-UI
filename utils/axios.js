@@ -1,18 +1,22 @@
 import axios from 'axios';
+import { UniAdapter } from "uniapp-axios-adapter";
 
 const service = axios.create({
   baseURL: "http://localhost:8090",
-  timeout: 100000 // Request timeout
+  timeout: 100000, // Request timeout
+  adapter: UniAdapter,
 });
 
 // Request interceptor
 service.interceptors.request.use(
   config => {
     // Get the token from localStorage
-    const token = localStorage.getItem('token');
+    const token = uni.getStorageSync('token');
+    console.log(token);
     if (token) {
       config.headers['Authorization'] = 'Bearer ' + token;
     }
+    config.headers['Content-Type'] = 'application/json;charset=utf-8';
     return config;
   },
   error => {

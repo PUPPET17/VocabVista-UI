@@ -2,39 +2,27 @@
   <div v-if="isVisible" class="custom-modal">
     <div class="modal-content">
       <div class="flip-card__front">
-         <select
-              class="flip-card__input"
-              name="dictInfo"
-              id="dictInfo-select"
-              style="color: grey"
-              :value="dictId"
-              @change="updateDictId"
-            >
-              <option value="" disabled>--请选择你想学习的词书--</option>
-              <option value="1">CET4</option>
-              <option value="2">CET6</option>
-              <option value="3">GRE</option>
-              <option value="4">IELTS</option>
-              <option value="5">TOEFL</option>
-            </select>
-        
-            <select
-              class="flip-card__input"
-              name="radius"
-              id="radius-select"
-              style="color: grey"
-              :value="count"
-              @change="updateCount"
-            >
-              <option value="" disabled>--请选择单次学习的词数--</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="75">75</option>
-              <option value="100">100</option>
-              <option value="200">200</option>
-            </select>
+        <select class="flip-card__input" name="dictInfo" id="dictInfo-select" style="color: grey" :value="dictId"
+          @change="updateDictId">
+          <option value="" disabled>--请选择你想学习的词书--</option>
+          <option value="1">CET4</option>
+          <option value="2">CET6</option>
+          <option value="3">GRE</option>
+          <option value="4">IELTS</option>
+          <option value="5">TOEFL</option>
+        </select>
+
+        <select class="flip-card__input" name="radius" id="radius-select" style="color: grey" :value="count"
+          @change="updateCount">
+          <option value="" disabled>--请选择单次学习的词数--</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="75">75</option>
+          <option value="100">100</option>
+          <option value="200">200</option>
+        </select>
         <div class="button-container">
           <button @click="onCancel" class="flip-card__btn">取消更改</button>
           <button @click="onConfirm" class="flip-card__btn">确认更改</button>
@@ -62,12 +50,12 @@ export default {
     };
   },
   methods: {
-	   updateDictId(event) {
-	        this.dictId = event.target.value;
-	      },
-	      updateCount(event) {
-	        this.count = event.target.value;
-	      },
+    updateDictId(event) {
+      this.dictId = event.target.value;
+    },
+    updateCount(event) {
+      this.count = event.target.value;
+    },
     onConfirm() {
       service.post('/word/setLearningStrategy', {
         dictId: this.dictId,
@@ -78,8 +66,13 @@ export default {
           service.post('/word/getWordList')
             .then(response => {
               this.jsonData = response.data;
-              localStorage.removeItem('wordData');
-              localStorage.setItem('wordData', JSON.stringify(response.data));
+              uni.removeStorage({
+                key: 'wordData',
+                success: function (res) {
+                  console.log('success');
+                }
+              });
+              uni.setStorageSync('wordData', JSON.stringify(response.data));
               uni.showToast({
                 title: '学习策略设置成功',
                 icon: 'success',

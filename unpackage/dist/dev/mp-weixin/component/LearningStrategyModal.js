@@ -30,8 +30,13 @@ const _sfc_main = {
         console.log("Learning strategy set successfully", response.data);
         utils_axios.service.post("/word/getWordList").then((response2) => {
           this.jsonData = response2.data;
-          localStorage.removeItem("wordData");
-          localStorage.setItem("wordData", JSON.stringify(response2.data));
+          common_vendor.index.removeStorage({
+            key: "wordData",
+            success: function(res) {
+              console.log("success");
+            }
+          });
+          common_vendor.index.setStorageSync("wordData", JSON.stringify(response2.data));
           common_vendor.index.showToast({
             title: "学习策略设置成功",
             icon: "success",

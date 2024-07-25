@@ -83,7 +83,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.wordData = JSON.parse(localStorage.getItem('reviewList'));
+		this.wordData = JSON.parse(uni.getStorageSync('reviewList'));
 	},
 	computed: {
 		// 计算属性用于根据当前索引获取当前单词
@@ -231,7 +231,7 @@ export default {
 			service.post('/Review/setReviewList', this.learningRecordList)
 				.then(response => {
 					// 处理响应
-					console.log('学习记录保存成功', response)
+					console.log('学习记录保存成功', response.data)
 				})
 				.catch(error => {
 					// 处理错误
@@ -240,9 +240,8 @@ export default {
 			service.post('/word/getWordList')
 				.then(response => {
 					this.jsonData = response.data;
-					localStorage.removeItem('wordData');
-					console.log(localStorage.getItem('wordData'));
-					localStorage.setItem('wordData', JSON.stringify(response.data));
+					uni.removeStorageSync('wordData');
+					uni.setStorageSync('wordData', JSON.stringify(response.data));
 					uni.switchTab({
 						url: '/pages/home'
 					});
@@ -262,8 +261,8 @@ export default {
 				}
 			})
 				.then(response => {
-					localStorage.removeItem('reviewList');
-					localStorage.setItem('reviewList', JSON.stringify(response.data));
+					uni.removeStorageSync('reviewList');
+					uni.setStorageSync('reviewList', JSON.stringify(response.data));
 				})
 				.catch(error => {
 					// console.error('Error fetching data:', error);
@@ -285,8 +284,7 @@ export default {
 			}
 			service.post('/Review/setReviewList', this.learningRecordList)
 				.then(response => {
-					console.log('学习记录保存成功', response);
-
+					console.log('学习记录保存成功', response.data);
 				})
 				.catch(error => {
 					console.error('学习记录保存失败', error);
@@ -294,9 +292,8 @@ export default {
 			service.post('/word/getWordList')
 				.then(response => {
 					this.jsonData = response.data;
-					localStorage.removeItem('wordData');
-					console.log(localStorage.getItem('wordData'));
-					localStorage.setItem('wordData', JSON.stringify(response.data));
+					uni.removeStorageSync('wordData');
+					uni.setStorageSync('wordData', JSON.stringify(response.data));
 					uni.switchTab({
 						url: '/pages/home'
 					});

@@ -65,39 +65,41 @@ export default {
 	},
 	created() {
 		// this.fetchData();
-		this.getInterestFromWordNik();
-		localStorage.removeItem('wordData');
+		
+		uni.removeStorageSync('wordData');
 		this.getWordList();
 		this.getDictInfo();
 		this.getReviewList();
+		this.getInterestFromWordNik();
 	},
 	methods: {
-		fetchData() {
-			service.get('/interest/getInterestWord')
-				.then(response => {
-					this.jsonData = response.data;
-					console.log('response.data:', response.data)
-				})
-				.catch(error => {
-					console.error('Error fetching data:', error);
-				});
-		},
+		// fetchData() {
+		// 	service.get('/interest/getInterestWord')
+		// 		.then(response => {
+		// 			this.jsonData = response;
+		// 			console.log('response.data:', response)
+		// 		})
+		// 		.catch(error => {
+		// 			console.error('Error fetching data:', error);
+		// 		});
+		// },
 		getInterestFromWordNik() {
 			service.get('/interest/getInterestWordFromWordNik')
 				.then(response => {
 					this.jsonData = response.data;
-					console.log('response.data:', response.data)
+					console.log('getInterestFromWordNik:', response.data)
 				})
 				.catch(error => {
-					console.error('Error fetching data:', error);
+					console.error('getInterestFromWordNik() Error fetching data:', error);
 				});
 		},
 		getWordList() {
 			service.post('/word/getWordList')
 				.then(response => {
 					this.jsonData = response.data;
-					localStorage.setItem('wordData', JSON.stringify(response.data));
 					console.log('response.data:', response.data)
+					console.log('wordData:', this.jsonData)
+					uni.setStorageSync('wordData', JSON.stringify(response.data));
 				})
 				.catch(error => {
 					console.error('Error fetching data:', error);
@@ -111,7 +113,7 @@ export default {
 			service.get('/word/getDictInfo')
 				.then(response => {
 					this.dictInfo = response.data;
-					localStorage.setItem('dictInfo', JSON.stringify(response.data));
+					uni.setStorageSync('dictInfo', JSON.stringify(response.data));
 					console.log('dictInfo:', this.dictInfo)
 				})
 				.catch(error => {
@@ -123,21 +125,19 @@ export default {
 				.then(response => {
 					this.learnCount = response.data.remainCount;
 					this.reviewCount = response.data.tobeReviewedCount;
-					localStorage.removeItem('learnCount');
-					localStorage.setItem('learnCount', this.learnCount);
+					uni.removeStorageSync('learnCount');
+					uni.setStorageSync('learnCount', this.learnCount);
 				})
 				.catch(error => {
 					console.error('Error fetching data:', error);
 				});
 		},
 		getReviewList() {
-			service.post('/Review/getReviewList', null, {
-				params: {
-					radius: 20
-				}
+			service.post('/Review/getReviewList', {
+				"radius": 20
 			})
 				.then(response => {
-					localStorage.setItem('reviewList', JSON.stringify(response.data));
+					uni.setStorageSync('reviewList', JSON.stringify(response.data));
 				})
 				.catch(error => {
 					// console.error('Error fetching data:', error);
