@@ -80,7 +80,8 @@
                     "target" : "http://localhost:8090", // 后端接口地址
                     "changeOrigin" : true
                 }
-            }
+            },
+            "port" : 8080
         },
         "router" : {
             "base" : ""

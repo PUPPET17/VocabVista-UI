@@ -1,5 +1,5 @@
 import App from './App'
-import axios from '/utils/axios.js'
+import * as Pinia from 'pinia';
 import 'element-plus/dist/index.css';
 
 // #ifndef VUE3
@@ -17,8 +17,10 @@ app.$mount()
 import { createSSRApp } from 'vue'
 export function createApp() {
   const app = createSSRApp(App)
+  app.use(Pinia.createPinia());
   return {
-    app
+    app,
+    Pinia,
   }
 }
 // #endif

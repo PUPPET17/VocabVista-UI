@@ -140,7 +140,7 @@ export default {
 					uni.setStorageSync('reviewList', JSON.stringify(response.data));
 				})
 				.catch(error => {
-					// console.error('Error fetching data:', error);
+					console.error('Error fetching data:', error);
 				});
 		}
 	}

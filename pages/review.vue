@@ -220,52 +220,21 @@ export default {
 		},
 		// 完成学习后的操作
 		submitContext() {
-			this.recordCurrentWord(); // 记录最后一个单词
-			// 提示用户正在保存
-			uni.showToast({
-				title: '正在保存学习记录',
-				icon: 'none',
-				duration: 2000
-			});
-			// 提交学习记录到后端
-			service.post('/Review/setReviewList', this.learningRecordList)
-				.then(response => {
-					// 处理响应
-					console.log('学习记录保存成功', response.data)
-				})
-				.catch(error => {
-					// 处理错误
-					console.error('学习记录保存失败', error);
-				});
-			service.post('/word/getWordList')
-				.then(response => {
-					this.jsonData = response.data;
-					uni.removeStorageSync('wordData');
-					uni.setStorageSync('wordData', JSON.stringify(response.data));
-					uni.switchTab({
-						url: '/pages/home'
-					});
-				})
-				.catch(error => {
-					console.error('Error fetching data:', error);
-				});
-			this.getReviewList();
-			if (this.favList.length > 0) {
-				this.saveFavList();
-			}
+			this.onConfirm();
+			setTimeout(() => {
+				location.reload();
+			}, 200);
 		},
 		getReviewList() {
-			service.post('/Review/getReviewList', null, {
-				params: {
-					radius: 20
-				}
+			service.post('/Review/getReviewList', {
+				"radius": 20
 			})
 				.then(response => {
 					uni.removeStorageSync('reviewList');
 					uni.setStorageSync('reviewList', JSON.stringify(response.data));
 				})
 				.catch(error => {
-					// console.error('Error fetching data:', error);
+					console.error('Error fetching data:', error);
 				});
 		},
 		showModal() {
@@ -274,17 +243,19 @@ export default {
 		onConfirm() {
 			this.recordCurrentWord();
 
-			uni.showToast({
-				title: '正在保存学习记录',
-				icon: 'none',
-				duration: 2000
-			});
 			if (this.favList.length > 0) {
 				this.saveFavList();
 			}
 			service.post('/Review/setReviewList', this.learningRecordList)
 				.then(response => {
 					console.log('学习记录保存成功', response.data);
+					uni.showToast({
+						title: '正在保存学习记录',
+						icon: 'none',
+						duration: 2000
+					});
+
+					this.getReviewList();
 				})
 				.catch(error => {
 					console.error('学习记录保存失败', error);
@@ -294,17 +265,18 @@ export default {
 					this.jsonData = response.data;
 					uni.removeStorageSync('wordData');
 					uni.setStorageSync('wordData', JSON.stringify(response.data));
-					uni.switchTab({
-						url: '/pages/home'
-					});
 				})
 				.catch(error => {
 					console.error('Error fetching data:', error);
 				});
-			this.getReviewList();
 			// 关闭弹窗
 			this.modalVisible = false;
-
+			uni.switchTab({
+				url: '/pages/home'
+			});
+			setTimeout(() => {
+				location.reload();
+			}, 200);
 		},
 		onCancel() {
 			console.log('用户点击取消');

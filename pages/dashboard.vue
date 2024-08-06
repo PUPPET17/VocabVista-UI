@@ -63,9 +63,6 @@ export default {
 			// 关闭弹窗
 			this.modalVisible = false;
 			this.getBasicInfo();
-			setTimeout(() => {
-				location.reload();
-			}, 200);
 		},
 		onCancel() {
 			this.modalVisible = false;
@@ -82,6 +79,9 @@ export default {
 						}
 					});
 					uni.setStorageSync('learnCount', this.learnCount);
+					setTimeout(() => {
+						location.reload();
+					}, 200);
 				})
 				.catch(error => {
 					console.error('Error fetching data:', error);
