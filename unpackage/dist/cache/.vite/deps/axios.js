@@ -16,7 +16,7 @@ import {
   mergeConfig,
   spread,
   toFormData
-} from "./chunk-MPYS5INC.js";
+} from "./chunk-JIZCA7XN.js";
 export {
   Axios,
   AxiosError,

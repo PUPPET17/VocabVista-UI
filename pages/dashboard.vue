@@ -72,12 +72,7 @@ export default {
 				.then(response => {
 					this.learnCount = response.data.remainCount;
 					this.reviewCount = response.data.tobeReviewedCount;
-					uni.removeStorage({
-						key: 'learnCount',
-						success: function (res) {
-							console.log('success');
-						}
-					});
+					uni.setStorageSync('reviewCount',this.learnCount);
 					uni.setStorageSync('learnCount', this.learnCount);
 					setTimeout(() => {
 						location.reload();

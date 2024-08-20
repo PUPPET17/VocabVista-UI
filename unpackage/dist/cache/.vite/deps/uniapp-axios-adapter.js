@@ -1,8 +1,8 @@
 import {
   axios_default
-} from "./chunk-MPYS5INC.js";
+} from "./chunk-JIZCA7XN.js";
 
-// C:/Users/10023/Desktop/fun/VocabVista-UI/node_modules/uniapp-axios-adapter/lib/index.esm.js
+// ../../../../fun/VocabVista-UI/node_modules/uniapp-axios-adapter/lib/index.esm.js
 var getResponse = (res, config) => {
   const { statusCode, errMsg } = res;
   const response = {
